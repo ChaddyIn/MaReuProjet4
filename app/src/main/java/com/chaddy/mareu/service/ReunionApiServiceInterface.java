@@ -13,28 +13,25 @@ public interface ReunionApiServiceInterface {
 
     /**
      * Get all my Neighbours
+     *
      * @return {@link List}
      */
-   List<Reunion> getReunion();
+    List<Reunion> getReunion();
 
+    List<Reunion> getReunionForFilter();
 
+    List<Reunion> getFilteredList();
 
+    Boolean setBoolForFilter(Boolean boolForFilter);
 
-
-    /**
-     * Deletes a neighbour
-     * @param reunion
-     */
     void deleteReunion(Reunion reunion);
 
     /**
      * Create a reunion
+     *
      * @param reunion
      */
     void createReunion(Reunion reunion);
-
-
-
 
 
 }

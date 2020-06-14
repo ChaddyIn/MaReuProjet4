@@ -32,6 +32,7 @@ import com.chaddy.mareu.model.Reunion;
 import com.chaddy.mareu.service.ReunionApiServiceInterface;
 
 import java.util.Calendar;
+import java.util.Random;
 import java.util.regex.Pattern;
 
 import butterknife.BindView;
@@ -52,7 +53,6 @@ public class AddReunionActivity extends AppCompatActivity {
     @BindView(R.id.create)
     MaterialButton addButton;
 
-
     @BindView(R.id.datePicker)
     TextInputEditText datePickerInput;
     private DatePickerDialog.OnDateSetListener mDateSetListener;
@@ -62,14 +62,14 @@ public class AddReunionActivity extends AppCompatActivity {
     private TimePickerDialog.OnTimeSetListener mTimeSetListener;
 
     private ReunionApiServiceInterface mApiService;
-    private String mNeighbourImage;
+
+    private int logo ;
 
     Calendar cal;
 
     private final static Pattern EmailLamzonePattern = Pattern.compile("[a-zA-Z0-9\\+\\.\\_\\%\\-\\+]{1,256}" + "\\@"
             + "lamzone.com"
     );
-
 
 
     @Override
@@ -80,8 +80,12 @@ public class AddReunionActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mApiService = DI.getReunionApiService();
         cal = Calendar.getInstance();
-        init();
 
+        randomLogo();
+
+
+
+        init();
 
 
         datePickerInput.setOnClickListener(new View.OnClickListener() {
@@ -178,18 +182,26 @@ public class AddReunionActivity extends AppCompatActivity {
     }
 
 
-
-    private boolean validateEmail(){
+    private boolean validateEmail() {
         String emailInput = participantsLyt.getEditText().getText().toString();
+        String[] Split = emailInput.split(",");
+        Boolean bool = true;
+        for (String split : Split) {
+            if (
+                    !EmailLamzonePattern.matcher(split.trim()).matches()
+            ) {
+                bool = false;
+                break;
+            }
+        }
 
-        if(emailInput.isEmpty()) {
+        if (emailInput.isEmpty()) {
             participantsLyt.setError("invalide format");
             return false;
-        } else if(!EmailLamzonePattern.matcher(emailInput).matches()){
+        } else if (!bool) {
             participantsLyt.setError("format must be @lamzone.com");
             return false;
-        }
-        else {
+        } else {
             participantsLyt.setError(null);
             return true;
         }
@@ -208,8 +220,8 @@ public class AddReunionActivity extends AppCompatActivity {
     }
 
     private void init() {
-        mNeighbourImage = randomImage();
 
+        avatar.setImageResource(logo);
 
         sujetLyt.getEditText().addTextChangedListener(new TextWatcher() {
             @Override
@@ -255,22 +267,32 @@ public class AddReunionActivity extends AppCompatActivity {
                 datePickerInput.getText().toString(),
                 timePickerInput.getText().toString(),
                 salleLyt.getEditText().getText().toString(),
-                participantsLyt.getEditText().getText().toString()
+                participantsLyt.getEditText().getText().toString(),
+                this.logo);
 
 
-        );
+
+
+
         mApiService.createReunion(reunion);
         finish();
     }
 
     /**
-     * Generate a random image. Useful to mock image picker
+     * Generate a random logo. Useful to mock image picker
      *
-     * @return String
+     * @return int
      */
-    String randomImage() {
-        return "https://i.pravatar.cc/150?u=" + System.currentTimeMillis();
+    public int randomLogo(){
+        int[] images = {R.drawable.circle,R.drawable.circle_red,R.drawable.circle,R.drawable.circle_red};
+        Random rand = new Random();
+       return logo = images[rand.nextInt(images.length)];
     }
+
+
+
+
+
 
     /**
      * Used to navigate to this activity

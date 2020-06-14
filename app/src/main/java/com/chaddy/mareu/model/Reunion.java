@@ -26,19 +26,24 @@ public class Reunion implements Serializable {
     /** Participants */
     private String participants;
 
+    /** Logo */
+    private int logo;
+
 
 
 
 
 
     public Reunion(long id, String sujet, String date, String horaire,
-                   String salle, String participants) {
+                   String salle, String participants, int logo) {
         this.id = id;
         this.sujet = sujet;
         this.date = date;
         this.horaire = horaire;
         this.salle = salle;
         this.participants = participants;
+        this.logo = logo;
+
 
     }
 
@@ -88,6 +93,13 @@ public class Reunion implements Serializable {
         this.participants = participants;
     }
 
+    public int getLogo(){
+        return logo;
+    }
+
+    public void setLogo(int logo){
+        this.logo = logo;
+    }
 
 
 

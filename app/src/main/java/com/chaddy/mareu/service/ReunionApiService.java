@@ -12,6 +12,12 @@ public class ReunionApiService implements ReunionApiServiceInterface {
 
     private List<Reunion> reunions = ReunionGenerator.generateReunions();
 
+    private List<Reunion> reunionsForFilter = ReunionGenerator.generateFilterList();
+
+    private List<Reunion> reunionsFiltered = ReunionGenerator.generateFilteredList();
+
+    Boolean boolFilter;
+
 
 
 
@@ -24,12 +30,17 @@ public class ReunionApiService implements ReunionApiServiceInterface {
         return reunions;
     }
 
+    public List<Reunion> getReunionForFilter() { return reunionsForFilter; }
+
+    public  List<Reunion> getFilteredList() {return  reunionsFiltered;}
 
 
 
+    public  Boolean setBoolForFilter(Boolean boolForFilter){
+        this.boolFilter = boolForFilter;
+        return false;
 
-
-
+    }
 
 
 
@@ -39,6 +50,9 @@ public class ReunionApiService implements ReunionApiServiceInterface {
      */
     @Override
    public void deleteReunion(Reunion reunion) { reunions.remove(reunion);
+   reunionsForFilter.remove(reunion);
+   reunionsFiltered.remove(reunion);
+
     }
 
     /**
@@ -46,8 +60,8 @@ public class ReunionApiService implements ReunionApiServiceInterface {
      * @param reunion
      */
    @Override
-    public void createReunion(Reunion reunion) {
-        reunions.add(reunion);
+    public void createReunion(Reunion reunion) { reunions.add(reunion);
+    reunionsForFilter.add(reunion);
     }
 
 

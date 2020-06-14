@@ -1,12 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item android:id="@+id/filtre"
-        android:title="FILTRE"
+
+
+    <item android:id="@+id/filtreParSalle"
+        android:title="FILTRE PAR SALLE"
         android:icon="@drawable/ic_filter_list_black_24dp"
-        app:showAsAction="ifRoom"
+        app:showAsAction="collapseActionView"
+        app:actionViewClass="android.support.v7.widget.SearchView"
         />
+
+<item android:id="@+id/filtreParDate"
+    android:title="FILTRE PAR DATE"
+    android:icon="@drawable/ic_filter_list_black_24dp"
+    app:showAsAction="collapseActionView"
+    app:actionViewClass="android.support.v7.widget.SearchView"
+    />
+
+
 
 
 </menu>
+

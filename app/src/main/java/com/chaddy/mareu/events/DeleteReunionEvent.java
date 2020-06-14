@@ -19,7 +19,6 @@ public class DeleteReunionEvent {
      * @param reunion
      */
     public DeleteReunionEvent(Reunion reunion) {
-
         this.reunion = reunion;
     }
 }
