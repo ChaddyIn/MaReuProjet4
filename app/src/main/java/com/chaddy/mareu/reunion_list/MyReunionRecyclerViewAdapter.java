@@ -113,27 +113,10 @@ public class MyReunionRecyclerViewAdapter extends RecyclerView.Adapter<MyReunion
         protected FilterResults performFiltering(CharSequence charSequence) {
 
 
-            List<Reunion> listFiltered = new ArrayList<>();
+            List<Reunion> listFiltered;
 
-            if (charSequence == null || charSequence.length() == 0) {
+          listFiltered = reunionApiServiceForFilter.filterByRoom(charSequence.toString());
 
-                listFiltered.clear();
-                listFiltered.addAll(mReunionFull);
-            } else {
-
-                String filterPattern = charSequence.toString().toLowerCase().trim();
-
-                for (Reunion reunionList : mReunionFull) {
-
-                    if (reunionList.getSalle().toLowerCase().contains(filterPattern)) {
-
-                        listFiltered.add(reunionList);
-
-                    }
-
-                }
-
-            }
 
             FilterResults results = new FilterResults();
             results.values = listFiltered;
@@ -161,28 +144,10 @@ public class MyReunionRecyclerViewAdapter extends RecyclerView.Adapter<MyReunion
         protected FilterResults performFiltering(CharSequence charSequence) {
 
 
-            List<Reunion> listFiltered = new ArrayList<>();
+            List<Reunion> listFiltered;
 
-            if (charSequence == null || charSequence.length() == 0) {
+            listFiltered = reunionApiServiceForFilter.filterByDate(charSequence.toString());
 
-
-                listFiltered.clear();
-                listFiltered.addAll(mReunionFull);
-            } else {
-
-
-                for (Reunion reunionList : mReunionFull) {
-
-                    String filterPattern = charSequence.toString().toLowerCase().trim();
-
-                    if (reunionList.getDate().toLowerCase().contains(filterPattern)) {
-
-
-                        listFiltered.add(reunionList);
-
-                    }
-                }
-            }
 
             FilterResults results = new FilterResults();
             results.values = listFiltered;

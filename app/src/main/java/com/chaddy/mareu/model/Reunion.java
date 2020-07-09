@@ -107,8 +107,8 @@ public class Reunion implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Reunion neighbour = (Reunion) o;
-        return Objects.equals(id, neighbour.id);
+        Reunion reunion = (Reunion) o;
+        return Objects.equals(id, reunion.id);
     }
 
     @Override

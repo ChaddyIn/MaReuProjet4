@@ -14,25 +14,24 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
-import android.util.Patterns;
-import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.TimePicker;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.chaddy.mareu.R;
 import com.chaddy.mareu.di.DI;
 import com.chaddy.mareu.model.Reunion;
 
 import com.chaddy.mareu.service.ReunionApiServiceInterface;
 
+import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
 import butterknife.BindView;
@@ -64,29 +63,44 @@ public class AddReunionActivity extends AppCompatActivity {
     private ReunionApiServiceInterface mApiService;
 
     private int logo ;
+    private Reunion reunion;
 
     Calendar cal;
+
+    private Long currentTime;
+    private Date date1;
+    private SimpleDateFormat simpleDateFormat;
+    private SimpleDateFormat simpleDateFormat1;
+    private Date date;
+    private String CurrentTime1;
+    private String CurrentDate;
+    private int i3;
+    private int i4;
 
     private final static Pattern EmailLamzonePattern = Pattern.compile("[a-zA-Z0-9\\+\\.\\_\\%\\-\\+]{1,256}" + "\\@"
             + "lamzone.com"
     );
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_neighbour);
+        setContentView(R.layout.activity_add_reunion);
         ButterKnife.bind(this);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mApiService = DI.getReunionApiService();
         cal = Calendar.getInstance();
 
+      currentTime = System.currentTimeMillis();
+        date1 = cal.getTime();
+        simpleDateFormat = new SimpleDateFormat("HH:mm" );
+        simpleDateFormat1 = new SimpleDateFormat("dd/MM/yyyy");
+        date = new Date(currentTime);
+        CurrentTime1 = simpleDateFormat.format(date);
+        CurrentDate = simpleDateFormat1.format(date1);
+
         randomLogo();
 
-
-
         init();
-
 
         datePickerInput.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -122,13 +136,40 @@ public class AddReunionActivity extends AppCompatActivity {
             }
         });
 
-
         mDateSetListener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
                 String Date = i2 + "/" + (i1 + 1) + "/" + i;
+
+
+                /**
+                 Verification on the format of the date
+                 */
+                if(i2 < 10){
+                    Date = "0" + Date;
+                }
+                if(i1< 10){
+                    Date = i2 + "/0" + (i1 + 1) + "/" + i;
+                }
+                if(i2<10 && i1 < 10){
+                    Date = "0"+i2 + "/0" + (i1 + 1) + "/" + i;
+                }
+
+                /**
+                 Verification on the time of the Meeting
+                 */
+
+                if(Date.equals(CurrentDate)&& (i3 < cal.get(Calendar.HOUR_OF_DAY) || i4<= cal.get(Calendar.MINUTE)) ){
+                    timePickerInput.setError("Veuillez choisir un horaire plus tard que l'heure actuelle");
+                    addButton.setEnabled(false);
+                }
+                else{
+                    timePickerInput.setError(null);
+                    addButton.setEnabled(true);
+                }
                 datePickerInput.setText(Date);
                 timePickerInput.requestFocus();
+
             }
         };
 
@@ -136,14 +177,48 @@ public class AddReunionActivity extends AppCompatActivity {
             @Override
             public void onTimeSet(TimePicker timePicker, int i, int i1) {
                 String Time = i + ":" + i1;
+
+                /**
+                 Verification on the format of the time
+                 */
+                if(i<10){
+                    Time = "0" + Time;
+                }
+                if(i1 <10){
+                    Time = i + ":0" + i1;
+                }
+                if(i <10 && i1 < 10)
+                {
+                    Time = "0"+i + ":0" + i1;
+                }
+
                 timePickerInput.setText(Time);
+
+                System.out.println("Time is "+CurrentTime1);
+                System.out.println("Time is "+CurrentDate);
+                System.out.println(Time);
+
+                /**
+                 Integer used to check the hour and the minute
+                 */
+                i3 = i;
+                i4 = i1;
+
+                if(datePickerInput.getEditableText().toString().equals(CurrentDate) &&
+                        (i< cal.get(Calendar.HOUR_OF_DAY) || i1 <= cal.get(Calendar.MINUTE))){
+                    timePickerInput.setError("Veuillez choisir un horaire plus tard que l'heure actuelle");
+                    addButton.setEnabled(false);
+                }
+                else{
+                    timePickerInput.setError(null);
+                    addButton.setEnabled(true);
+                }
+
                 salleLyt.requestFocus();
             }
         };
 
-
     }
-
     /**
      * Show calendar date dialog
      */
@@ -154,14 +229,15 @@ public class AddReunionActivity extends AppCompatActivity {
         int month = cal.get(Calendar.MONTH);
         int day = cal.get(Calendar.DAY_OF_MONTH);
 
+
         DatePickerDialog dialog = new DatePickerDialog(
                 AddReunionActivity.this, android.R.style.Theme_DeviceDefault_Light_Dialog, mDateSetListener,
                 year, month, day);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.CYAN));
+        dialog.getDatePicker().setMinDate(cal.getTimeInMillis());
         dialog.show();
 
     }
-
 
     /**
      * Show calendar Time dialog
@@ -172,20 +248,26 @@ public class AddReunionActivity extends AppCompatActivity {
         int hour = cal.get(Calendar.HOUR_OF_DAY);
         int minute = cal.get(Calendar.MINUTE);
 
-
         TimePickerDialog dialog = new TimePickerDialog(
                 AddReunionActivity.this, android.R.style.Theme_DeviceDefault_Light_Dialog, mTimeSetListener,
                 hour, minute, true);
+
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.CYAN));
         dialog.show();
 
+
+
+
     }
 
-
+   /**
+    Verify if the email format is @lamzone.com or not empty
+    */
     private boolean validateEmail() {
         String emailInput = participantsLyt.getEditText().getText().toString();
-        String[] Split = emailInput.split(",");
+        String[] Split = emailInput.split(","+" ");
         Boolean bool = true;
+
         for (String split : Split) {
             if (
                     !EmailLamzonePattern.matcher(split.trim()).matches()
@@ -194,29 +276,19 @@ public class AddReunionActivity extends AppCompatActivity {
                 break;
             }
         }
-
         if (emailInput.isEmpty()) {
             participantsLyt.setError("invalide format");
+            addButton.setEnabled(false);
             return false;
         } else if (!bool) {
             participantsLyt.setError("format must be @lamzone.com");
+            addButton.setEnabled(false);
             return false;
         } else {
             participantsLyt.setError(null);
+            addButton.setEnabled(true);
             return true;
         }
-    }
-
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home: {
-                finish();
-                return true;
-            }
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     private void init() {
@@ -238,6 +310,42 @@ public class AddReunionActivity extends AppCompatActivity {
             }
         });
 
+        salleLyt.getEditText().addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                reunion = new Reunion(
+                        System.currentTimeMillis(),
+                        sujetLyt.getEditText().getText().toString(),
+                        datePickerInput.getText().toString(),
+                        timePickerInput.getText().toString(),
+                        salleLyt.getEditText().getText().toString(),
+                        participantsLyt.getEditText().getText().toString(),
+                        logo);
+                for(Reunion reunionList : mApiService.getReunion()){
+
+                    if(reunion.getSalle().equals(reunionList.getSalle()) && reunion.getDate().equals(reunionList.getDate())
+                            && reunion.getHoraire().equals(reunionList.getHoraire())){
+
+                        salleLyt.setError("La salle est déjà utilisée à cette horaire");
+                        addButton.setEnabled(false);
+                    }
+                    else{
+                        addButton.setEnabled(true);
+                        salleLyt.setError(null);
+                    }
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+            }
+        });
         participantsLyt.getEditText().addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int start, int count, int after) {
@@ -250,36 +358,24 @@ public class AddReunionActivity extends AppCompatActivity {
                 validateEmail();
 
             }
-
             @Override
             public void afterTextChanged(Editable editable) {
+
+
 
             }
         });
 
     }
-
     @OnClick(R.id.create)
     void addReunion() {
-        Reunion reunion = new Reunion(
-                System.currentTimeMillis(),
-                sujetLyt.getEditText().getText().toString(),
-                datePickerInput.getText().toString(),
-                timePickerInput.getText().toString(),
-                salleLyt.getEditText().getText().toString(),
-                participantsLyt.getEditText().getText().toString(),
-                this.logo);
-
-
-
-
 
         mApiService.createReunion(reunion);
         finish();
     }
 
     /**
-     * Generate a random logo. Useful to mock image picker
+     * Generate a random logo.
      *
      * @return int
      */
@@ -288,11 +384,6 @@ public class AddReunionActivity extends AppCompatActivity {
         Random rand = new Random();
        return logo = images[rand.nextInt(images.length)];
     }
-
-
-
-
-
 
     /**
      * Used to navigate to this activity

@@ -22,8 +22,6 @@ public interface ReunionApiServiceInterface {
 
     List<Reunion> getFilteredList();
 
-    Boolean setBoolForFilter(Boolean boolForFilter);
-
     void deleteReunion(Reunion reunion);
 
     /**
@@ -32,6 +30,9 @@ public interface ReunionApiServiceInterface {
      * @param reunion
      */
     void createReunion(Reunion reunion);
+
+    List<Reunion> filterByRoom(String Room);
+
 
 
 }

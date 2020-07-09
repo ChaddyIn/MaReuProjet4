@@ -6,15 +6,15 @@ xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item android:id="@+id/filtreParSalle"
         android:title="FILTRE PAR SALLE"
-        android:icon="@drawable/ic_filter_list_black_24dp"
-        app:showAsAction="collapseActionView"
+        android:icon="@drawable/ic_filter_meeting_room_24"
+        app:showAsAction="collapseActionView|ifRoom"
         app:actionViewClass="android.support.v7.widget.SearchView"
         />
 
 <item android:id="@+id/filtreParDate"
     android:title="FILTRE PAR DATE"
-    android:icon="@drawable/ic_filter_list_black_24dp"
-    app:showAsAction="collapseActionView"
+    android:icon="@drawable/ic_date_filter_24"
+    app:showAsAction="collapseActionView|ifRoom"
     app:actionViewClass="android.support.v7.widget.SearchView"
     />
 

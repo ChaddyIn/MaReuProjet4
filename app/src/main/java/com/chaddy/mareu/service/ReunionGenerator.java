@@ -14,7 +14,7 @@ import java.util.Random;
 public abstract class ReunionGenerator {
 
 
-    public static List<Reunion> DUMMY_NEIGHBOURS = Arrays.asList(
+    public static List<Reunion> DEFAULT_REUNIONS = Arrays.asList(
             new Reunion(1, "Reunion A", "18/05/2020", "16:45",
                     "PEACH", "hello@limzone.fr", R.drawable.circle),
 
@@ -34,11 +34,11 @@ public abstract class ReunionGenerator {
 
 
     static List<Reunion> generateReunions() {
-        return new ArrayList<>(DUMMY_NEIGHBOURS);
+        return new ArrayList<>(DEFAULT_REUNIONS);
     }
 
     static List<Reunion> generateFilterList() {
-        return new ArrayList<>(DUMMY_NEIGHBOURS);
+        return new ArrayList<>(DEFAULT_REUNIONS);
     }
 
     static List<Reunion> generateFilteredList() {

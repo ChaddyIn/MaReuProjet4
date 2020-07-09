@@ -4,12 +4,12 @@ import com.chaddy.mareu.model.Reunion;
 
 
 /**
- * Event fired when a user deletes a Neighbour
+ * Event fired when a user deletes a Reunion
  */
 public class DeleteReunionEvent {
 
     /**
-     * Neighbour to delete
+     * Reunion to delete
      */
     public Reunion reunion;
 

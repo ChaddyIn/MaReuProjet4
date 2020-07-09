@@ -1,9 +1,8 @@
 package com.chaddy.mareu.reunion_list;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,11 +12,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.Filter;
-import android.widget.Filterable;
-import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.chaddy.mareu.R;
@@ -30,11 +24,7 @@ import com.chaddy.mareu.service.ReunionApiService;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -63,7 +53,7 @@ public class ListReunionActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_list_neighbour);
+        setContentView(R.layout.activity_list_reunion);
         ButterKnife.bind(this);
 
 
@@ -160,6 +150,14 @@ public class ListReunionActivity extends AppCompatActivity {
         super.onResume();
         mReunionR.notifyDataSetChanged();
         mRecyclerView.setAdapter(mReunionR);
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig){
+        super.onConfigurationChanged(newConfig);
+
+        mReunionR.notifyDataSetChanged();
+        Toast.makeText(this,"ok", Toast.LENGTH_SHORT);
     }
 
 
