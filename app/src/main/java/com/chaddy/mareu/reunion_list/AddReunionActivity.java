@@ -74,7 +74,7 @@ public class AddReunionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_reunion);
         ButterKnife.bind(this);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         mApiService = DI.getReunionApiService();
         cal = Calendar.getInstance();
         randomLogo();
