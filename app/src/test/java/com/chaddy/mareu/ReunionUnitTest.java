@@ -31,11 +31,10 @@ import static org.junit.Assert.*;
 public class ReunionUnitTest {
 
     private ReunionApiService service;
-    private MyReunionRecyclerViewAdapter mReunionRe;
+
 
     @Before
     public void setup() {
-
         service = DI.getNewInstanceApiService();
     }
 

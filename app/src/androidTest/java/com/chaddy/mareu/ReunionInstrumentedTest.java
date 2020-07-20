@@ -17,6 +17,7 @@ import com.chaddy.mareu.utils.DeleteViewAction;
 import com.chaddy.mareu.utils.SearchViewUtils;
 
 import org.hamcrest.Matchers;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -55,8 +56,6 @@ import static org.junit.Assert.assertThat;
 public class ReunionInstrumentedTest {
 
 
-
-
     private ListReunionActivity mActivity;
 
     private static int ITEMS_COUNT = 4;
@@ -78,18 +77,6 @@ public class ReunionInstrumentedTest {
     }
 
 
-    @Test
-    public void myReunionList_deleteAction_shouldRemoveItem() {
-        // Given : We remove the element at position 2
-
-        // When perform a click on a delete icon
-        onView((withId(R.id.list_reunion)))
-                .perform(RecyclerViewActions.actionOnItemAtPosition(1, new DeleteViewAction()));
-        // Then : the number of element is 3
-        onView(withId(R.id.list_reunion))
-                .check(withItemCount(ITEMS_COUNT-1));
-    }
-
 
     @Test
     public void filterByDate_Display_FilteredList(){
@@ -97,10 +84,10 @@ public class ReunionInstrumentedTest {
 
         //Open filter
            onView(withId(R.id.filtreParDate)).perform(click());
-           onView(withClassName(is("android.support.v7.widget.SearchView"))).perform(SearchViewUtils.typeSearchViewText("18"));
+           onView(withClassName(is("android.support.v7.widget.SearchView"))).perform(SearchViewUtils.typeSearchViewText("24"));
         onView(withId(R.id.list_reunion))
                 .check(matches(hasMinimumChildCount(1)));
-        onView(withId(R.id.item_list_meeting)).check(matches(withText(containsString("18"))));
+        onView(withId(R.id.item_list_meeting)).check(matches(withText(containsString("24"))));
 
 
 
@@ -113,12 +100,24 @@ public class ReunionInstrumentedTest {
 
         //Open filter
         onView(withId(R.id.filtreParSalle)).perform(click());
-        onView(withClassName(is("android.support.v7.widget.SearchView"))).perform(SearchViewUtils.typeSearchViewText("LE"));
+        onView(withClassName(is("android.support.v7.widget.SearchView"))).perform(SearchViewUtils.typeSearchViewText("LEA"));
         onView(withId(R.id.list_reunion))
                 .check(matches(hasMinimumChildCount(1)));
-        onView(withId(R.id.item_list_meeting)).check(matches(withText(containsString("LE"))));
+        onView(withId(R.id.item_list_meeting)).check(matches(withText(containsString("LEA"))));
 
 
 
+    }
+
+    @Test
+    public void myReunionList_deleteAction_shouldRemoveItem() {
+
+
+
+        onView((withId(R.id.list_reunion))).check(matches(isDisplayed()));
+        onView(withId(R.id.list_reunion))
+                .perform(RecyclerViewActions.actionOnItemAtPosition(0, new DeleteViewAction()));
+        onView(withId(R.id.list_reunion))
+                .check(withItemCount(ITEMS_COUNT-1));
     }
 }

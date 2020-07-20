@@ -2,7 +2,6 @@ package com.chaddy.mareu.service;
 
 import com.chaddy.mareu.model.Reunion;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,6 +29,7 @@ public class ReunionApiService implements ReunionApiServiceInterface {
     public List<Reunion> getReunion() {
         return reunions;
     }
+
 
     public List<Reunion> getReunionForFilter() { return reunionsForFilter; }
 

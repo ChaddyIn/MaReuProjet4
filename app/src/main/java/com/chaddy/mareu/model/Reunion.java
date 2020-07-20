@@ -59,7 +59,7 @@ public class Reunion implements Serializable {
         return salle;
     }
 
-    public void setSalle(String name) {
+    public void setSalle(String salle) {
         this.salle = salle;
     }
 

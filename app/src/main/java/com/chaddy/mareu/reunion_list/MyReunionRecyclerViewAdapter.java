@@ -59,7 +59,7 @@ public class MyReunionRecyclerViewAdapter extends RecyclerView.Adapter<MyReunion
         holder.mMeetingInfo.setText(reunion.getSujet() + " - " + reunion.getDate() + " - " + reunion.getHoraire() + " - " + reunion.getSalle().toUpperCase());
         holder.mListParticipants.setText(reunion.getParticipants());
 
-        holder.mNeighbourAvatar.setImageResource(reunion.getLogo());
+        holder.mReunionAvatar.setImageResource(reunion.getLogo());
 
 
         holder.mDeleteButton.setOnClickListener(new View.OnClickListener() {
@@ -77,7 +77,7 @@ public class MyReunionRecyclerViewAdapter extends RecyclerView.Adapter<MyReunion
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.item_list_avatar)
-        public ImageView mNeighbourAvatar;
+        public ImageView mReunionAvatar;
         @BindView(R.id.item_list_meeting)
         public TextView mMeetingInfo;
         @BindView(R.id.item_list_delete_button)

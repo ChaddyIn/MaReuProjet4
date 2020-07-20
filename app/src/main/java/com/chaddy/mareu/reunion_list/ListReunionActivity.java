@@ -12,7 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.Toast;
+
 
 import com.chaddy.mareu.R;
 import com.chaddy.mareu.di.DI;
@@ -66,6 +66,8 @@ public class ListReunionActivity extends AppCompatActivity {
         mReunionR = new MyReunionRecyclerViewAdapter(mReunion);
         mRecyclerView.setAdapter(mReunionR);
 
+        mReunionR.notifyDataSetChanged();
+
         EventBus.getDefault().register(this);
 
 
@@ -73,6 +75,7 @@ public class ListReunionActivity extends AppCompatActivity {
 
 
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -90,8 +93,6 @@ public class ListReunionActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextSubmit(String s) {
-
-                Toast.makeText(getApplicationContext(), "ooooook", Toast.LENGTH_SHORT).show();
                 return false;
             }
 
@@ -100,9 +101,7 @@ public class ListReunionActivity extends AppCompatActivity {
             public boolean onQueryTextChange(String s) {
 
                 mReunionR.getFilter().filter(s);
-
                 mReunionR.notifyDataSetChanged();
-                Toast.makeText(getApplicationContext(), "ook", Toast.LENGTH_SHORT).show();
                 return false;
             }
         });
@@ -122,12 +121,8 @@ public class ListReunionActivity extends AppCompatActivity {
             }
         });
 
-
         return true;
     }
-
-
-
 
 
     @Subscribe
@@ -139,6 +134,12 @@ public class ListReunionActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mReunionR.notifyDataSetChanged();
+    }
+
     @OnClick(R.id.add_reunion)
     void addReunion() {
         AddReunionActivity.navigate(this);
@@ -146,20 +147,13 @@ public class ListReunionActivity extends AppCompatActivity {
 
 
     @Override
-    public void onResume() {
-        super.onResume();
-        mReunionR.notifyDataSetChanged();
-        mRecyclerView.setAdapter(mReunionR);
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig){
+    public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
 
         mReunionR.notifyDataSetChanged();
-        Toast.makeText(this,"ok", Toast.LENGTH_SHORT);
-    }
 
+
+    }
 
 }
 
