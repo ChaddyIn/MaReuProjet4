@@ -58,8 +58,8 @@ public class AddReunionActivity extends AppCompatActivity {
     Calendar cal;
     private Long currentTime;
     private Date date1;
-    private SimpleDateFormat simpleDateFormat;
-    private SimpleDateFormat simpleDateFormat1;
+    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
+    private SimpleDateFormat simpleDateFormat1 = new SimpleDateFormat("dd/MM/yyyy");
     private Date date;
     private String CurrentTime1;
     private String CurrentDate;
@@ -79,102 +79,15 @@ public class AddReunionActivity extends AppCompatActivity {
         cal = Calendar.getInstance();
         randomLogo();
         reunion = new Reunion(
-                System.currentTimeMillis(),
-                sujetLyt.getEditText().getText().toString(),
-                datePickerInput.getText().toString(),
-                timePickerInput.getText().toString(),
-                salleLyt.getEditText().getText().toString(),
-                participantsLyt.getEditText().getText().toString(),
-                logo);
+                System.currentTimeMillis(), sujetLyt.getEditText().getText().toString(), datePickerInput.getText().toString(), timePickerInput.getText().toString(), salleLyt.getEditText().getText().toString(), participantsLyt.getEditText().getText().toString(), logo);
         currentTime = System.currentTimeMillis();
         date1 = cal.getTime();
-        simpleDateFormat = new SimpleDateFormat("HH:mm");
-        simpleDateFormat1 = new SimpleDateFormat("dd/MM/yyyy");
         date = new Date(currentTime);
         CurrentTime1 = simpleDateFormat.format(date);
         CurrentDate = simpleDateFormat1.format(date1);
-
         init();
-        datePickerInput.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showCalendarDatePicker();
-            }
-        });
-        datePickerInput.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean b) {
-                if (b) {
-                    showCalendarDatePicker();
-                }
-            }
-        });
-        timePickerInput.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean b) {
-                if (b) {
-                    showCalendarTimePicker();
-                }
-            }
-        });
-        timePickerInput.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showCalendarTimePicker();
-            }
-        });
-        mDateSetListener = new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
-                String Date = i2 + "/" + (i1 + 1) + "/" + i;
-
-                /** Verification on the format of the date */
-                if (i2 < 10) {
-                    Date = "0" + Date;
-                }
-                if (i1 < 10) {
-                    Date = i2 + "/0" + (i1 + 1) + "/" + i;
-                }
-                if (i2 < 10 && i1 < 10) {
-                    Date = "0" + i2 + "/0" + (i1 + 1) + "/" + i;
-                }
-                datePickerInput.setText(Date);
-                checkDate();
-                validateEmail();
-                checkRoomIsSet();
-                timePickerInput.requestFocus();
-                reunion.setDate(Date);
-            }
-        };
-        mTimeSetListener = new TimePickerDialog.OnTimeSetListener() {
-            @Override
-            public void onTimeSet(TimePicker timePicker, int i, int i1) {
-                String Time = i + ":" + i1;
-
-                /**Verification on the format of the time*/
-                if (i < 10) {
-                    Time = "0" + Time;
-                }
-                if (i1 < 10) {
-                    Time = i + ":0" + i1;
-                }
-                if (i < 10 && i1 < 10) {
-                    Time = "0" + i + ":0" + i1;
-                }
-                timePickerInput.setText(Time);
-                System.out.println("Time is " + CurrentTime1);
-                System.out.println("Time is " + CurrentDate);
-                System.out.println(Time);
-                /** Integer used to check the hour and the minute*/
-                i3 = i;
-                i4 = i1;
-                checkDate();
-                validateEmail();
-                checkRoomIsSet();
-                reunion.setHoraire(Time);
-                salleLyt.requestFocus();
-            }
-        };
+        initDatePicker();
+        initTimePicker();
     }
     /**Show calendar date dialog*/
     public void showCalendarDatePicker() {
@@ -226,18 +139,98 @@ public class AddReunionActivity extends AppCompatActivity {
             return true;
         }
     }
+    private void initDatePicker(){
+
+        datePickerInput.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showCalendarDatePicker();
+            }
+        });
+        datePickerInput.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if (b) {
+                    showCalendarDatePicker();
+                }
+            }
+        });
+        mDateSetListener = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
+                String Date = i2 + "/" + (i1 + 1) + "/" + i;
+
+                /** Verification on the format of the date */
+                if (i2 < 10) {
+                    Date = "0" + Date;
+                }
+                if (i1 < 10) {
+                    Date = i2 + "/0" + (i1 + 1) + "/" + i;
+                }
+                if (i2 < 10 && i1 < 10) {
+                    Date = "0" + i2 + "/0" + (i1 + 1) + "/" + i;
+                }
+                datePickerInput.setText(Date);
+                checkDate();
+                validateEmail();
+                checkRoomIsSet();
+                timePickerInput.requestFocus();
+                reunion.setDate(Date);
+            }
+        };
+    }
+    private void initTimePicker(){
+
+        timePickerInput.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if (b) {
+                    showCalendarTimePicker();
+                }
+            }
+        });
+        timePickerInput.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showCalendarTimePicker();
+            }
+        });
+        mTimeSetListener = new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker timePicker, int i, int i1) {
+                String Time = i + ":" + i1;
+                /**Verification on the format of the time*/
+                if (i < 10) {
+                    Time = "0" + Time;
+                }
+                if (i1 < 10) {
+                    Time = i + ":0" + i1;
+                }
+                if (i < 10 && i1 < 10) {
+                    Time = "0" + i + ":0" + i1;
+                }
+                timePickerInput.setText(Time);
+                /** Integer used to check the hour and the minute*/
+                i3 = i;
+                i4 = i1;
+                checkDate();
+                validateEmail();
+                checkRoomIsSet();
+                reunion.setHoraire(Time);
+                salleLyt.requestFocus();
+            }
+        };
+    }
     private void init() {
         avatar.setImageResource(logo);
         sujetLyt.getEditText().addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
-
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 reunion.setSujet(sujetLyt.getEditText().getText().toString());
             }
-
             @Override
             public void afterTextChanged(Editable s) {
             }
@@ -263,7 +256,6 @@ public class AddReunionActivity extends AppCompatActivity {
                     }
                 }
             }
-
             @Override
             public void afterTextChanged(Editable editable) {
             }
@@ -289,7 +281,6 @@ public class AddReunionActivity extends AppCompatActivity {
         mApiService.createReunion(reunion);
         finish();
     }
-
     /** Generate a random logo.  @return int*/
     public int randomLogo() {
         int[] images = {R.drawable.circle, R.drawable.circle_red, R.drawable.circle, R.drawable.circle_red};
