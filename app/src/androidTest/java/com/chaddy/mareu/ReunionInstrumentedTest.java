@@ -114,7 +114,6 @@ public class ReunionInstrumentedTest {
         onView(withId(R.id.list_reunion))
                 .check(matches(hasMinimumChildCount(1)));
         onView(withId(R.id.item_list_meeting)).check(matches(withText(containsString("LEA"))));
-        onView(withId(R.id.item_list_meeting)).check(matches(withText(containsString("LEA"))));
 
 
     }
